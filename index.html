@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>鉄壁演習：難関大合格への英単語</title>
+  <title>鉄壁演習 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -12,16 +12,12 @@
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col items-center p-4 font-sans text-slate-800 pt-6">
 
-  <div id="app" class="w-full max-w-md">
-    </div>
+  <div id="app" class="w-full max-w-md"></div>
 
   <script>
-    /**
-     * 【重要】単語リストのセクション
-     * ここに単語を追加していくことで、問題数を200個、300個と増やせます。
-     */
+    // --- 単語データベース（ここを増やせば200問でも対応可能） ---
     const WORD_LIST = [
-      // Section 1: 獲得・達成
+      // Section 1
       { word: 'acquire', meaning: '〜を習得する、〜を獲得する', options: ['〜を習得する', '〜を捨てる', '〜を避ける', '〜を誇る'] },
       { word: 'attain', meaning: '〜を達成する、〜に到達する', options: ['〜を維持する', '〜を達成する', '〜を妨げる', '〜を疑う'] },
       { word: 'abandon', meaning: '〜を捨てる、〜をあきらめる', options: ['〜を育てる', '〜を認める', '〜を捨てる', '〜を隠す'] },
@@ -29,31 +25,7 @@
       { word: 'fulfill', meaning: '〜を果たす、〜を満たす', options: ['〜を無視する', '〜を破壊する', '〜を延期する', '〜を果たす'] },
       { word: 'accomplish', meaning: '〜を成し遂げる', options: ['〜を成し遂げる', '〜を諦める', '〜を計画する', '〜を失敗する'] },
       { word: 'achieve', meaning: '〜を達成する', options: ['〜を邪魔する', '〜を達成する', '〜を後回しにする', '〜を忘れる'] },
-      
-      // 医学・生命科学系（難関大頻出）
-      { word: 'symptom', meaning: '症状、兆候', options: ['治療法', '症状、兆候', '免疫', '疲労'] },
-      { word: 'diagnose', meaning: '〜を診断する', options: ['〜を処方する', '〜を予防する', '〜を悪化させる', '〜を診断する'] },
-      { word: 'prescribe', meaning: '〜を処方する、規定する', options: ['〜を処方する', '〜を診断する', '〜を禁止する', '〜を摂取する'] },
-      { word: 'immune', meaning: '免疫のある、免れた', options: ['感染しやすい', '免疫のある', '致命的な', '慢性の'] },
-      { word: 'susceptible', meaning: '影響を受けやすい、感染しやすい', options: ['感染しやすい', '抵抗力のある', '無症状の', '健康的な'] },
-      { word: 'acute', meaning: '急性の、鋭い', options: ['鈍い', '慢性の', '急性の', '無感覚の'] },
-      { word: 'cognitive', meaning: '認知の、認識の', options: ['感情的な', '身体の', '認知の', '無意識の'] },
-
-      // 論理・思考・調査
-      { word: 'analyze', meaning: '〜を分析する', options: ['〜を統合する', '〜を分析する', '〜を無視する', '〜を推測する'] },
-      { word: 'assess', meaning: '〜を評価する、査定する', options: ['〜を評価する', '〜を破壊する', '〜を創造する', '〜を隠蔽する'] },
-      { word: 'evaluate', meaning: '〜を評価する', options: ['〜を軽視する', '〜を評価する', '〜を提案する', '〜を拒否する'] },
-      { word: 'investigate', meaning: '〜を調査する', options: ['〜を調査する', '〜を発明する', '〜を信じる', '〜を疑う'] },
-      { word: 'infer', meaning: '〜を推察する', options: ['〜を断定する', '〜を推察する', '〜を疑う', '〜を教える'] },
-      
-      // 高度語彙・実践（TOEIC/二次対策）
-      { word: 'implement', meaning: '〜を実行する、履行する', options: ['〜を計画する', '〜を実行する', '〜を中止する', '〜を評価する'] },
-      { word: 'comprehensive', meaning: '包括的な、総合的な', options: ['部分的な', '専門的な', '包括的な', '表面的な'] },
-      { word: 'mandatory', meaning: '義務的な、強制的な', options: ['任意の', '義務的な', '自発的な', '選択制の'] },
-      { word: 'lucrative', meaning: '利益の上がる、儲かる', options: ['無駄な', '危険な', '利益の上がる', '違法な'] },
-      { word: 'versatile', meaning: '多才な、用途の広い', options: ['単能の', '不器用な', '多才な', '頑固な'] },
-      { word: 'meticulous', meaning: '細心の注意を払った', options: ['大雑把な', '不注意な', '細心の注意を払った', '無関心な'] }
-           // Section 2: 喪失・拒絶
+      // Section 2
       { word: 'deprive', meaning: '〜から奪う', options: ['〜から奪う', '〜に与える', '〜を許す', '〜を救う'] },
       { word: 'rob', meaning: '〜から奪う、盗む', options: ['〜を貸す', '〜から奪う', '〜を祝う', '〜を避ける'] },
       { word: 'omit', meaning: '〜を除外する、抜かす', options: ['〜を加える', '〜を強調する', '〜を除外する', '〜を認める'] },
@@ -61,65 +33,64 @@
       { word: 'reject', meaning: '〜を拒絶する', options: ['〜を拒絶する', '〜を受け入れる', '〜を称賛する', '〜を提案する'] },
       { word: 'refuse', meaning: '〜を断る', options: ['〜を断る', '〜を同意する', '〜を許す', '〜を頼む'] },
       { word: 'deny', meaning: '〜を否定する', options: ['〜を主張する', '〜を肯定する', '〜を否定する', '〜を白状する'] },
-
-      // Section 3: 保持・継続
+      // Section 3
       { word: 'retain', meaning: '〜を保持する、維持する', options: ['〜を放出する', '〜を保持する', '〜を忘れる', '〜を捨てる'] },
       { word: 'maintain', meaning: '〜を維持する、主張する', options: ['〜を維持する', '〜を放棄する', '〜を無視する', '〜を疑う'] },
       { word: 'preserve', meaning: '〜を保存する、保護する', options: ['〜を破壊する', '〜を汚染する', '〜を保存する', '〜を消費する'] },
       { word: 'sustain', meaning: '〜を支える、持続させる', options: ['〜を支える', '〜を崩壊させる', '〜を止める', '〜を拒む'] },
       { word: 'persist', meaning: '持続する、固執する', options: ['持続する', '諦める', '変化する', '移動する'] },
-
-      // Section 4: 変化・修復
+      // Section 4 & 5
       { word: 'alter', meaning: '〜を変える', options: ['〜を変える', '〜を維持する', '〜を固定する', '〜を模倣する'] },
       { word: 'modify', meaning: '〜を修正する', options: ['〜を強化する', '〜を修正する', '〜を放置する', '〜を破壊する'] },
-      { word: 'reform', meaning: '〜を改革する', options: ['〜を改革する', '〜を改悪する', '〜を保存する', '〜を隠す'] },
-      { word: 'convert', meaning: '〜を転換する、変える', options: ['〜を転換する', '〜を維持する', '〜を拒む', '〜を分ける'] },
-      { word: 'remedy', meaning: '救済策、治療薬', options: ['原因', '副作用', '救済策', '病気'] },
-
-      // Section 5: 結合・分離
       { word: 'attach', meaning: '〜を貼り付ける、添付する', options: ['〜を貼り付ける', '〜を切り離す', '〜を捨てる', '〜を運ぶ'] },
       { word: 'detach', meaning: '〜を切り離す', options: ['〜を貼り付ける', '〜を切り離す', '〜を混ぜる', '〜を隠す'] },
       { word: 'combine', meaning: '〜を結合させる', options: ['〜を結合させる', '〜を分離する', '〜を破壊する', '〜を拒否する'] },
-      { word: 'integrate', meaning: '〜を統合する', options: ['〜を統合する', '〜を分裂させる', '〜を排除する', '〜を無視する'] },
-      { word: 'separate', meaning: '〜を分離する', options: ['〜を分離する', '〜をつなぐ', '〜を招待する', '〜を好む'] },
-      { word: 'isolate', meaning: '〜を孤立させる', options: ['〜を孤立させる', '〜を保護する', '〜を交流させる', '〜を助ける'] },
-      { word: 'exclude', meaning: '〜を排除する', options: ['〜を含む', '〜を排除する', '〜を歓迎する', '〜を選択する'] },
-      { word: 'divide', meaning: '〜を分割する', options: ['〜を分割する', '〜を結合する', '〜を増やす', '〜を失う'] }
-     // ※ ここにさらに単語を増やしていくことが可能です
+      { word: 'separate', meaning: '〜を分離する', options: ['〜を分離する', '〜をつなぐ', '〜を招待する', '〜を好む'] }
     ];
 
+    // --- 状態管理用変数 ---
+    let quizSessionWords = []; // 今回の25問
     let currentIdx = 0;
     let score = 0;
     let isAnswering = false;
 
-    // 記録保持
+    // ローカルストレージ
     let bestScore = parseInt(localStorage.getItem('teppeki_best') || '0');
     let totalPlays = parseInt(localStorage.getItem('teppeki_plays') || '0');
 
     const appDiv = document.getElementById('app');
 
-    // クイズ画面表示
+    // --- 関数：セッション開始 ---
+    function startNewSession() {
+      // 全単語をシャッフル
+      const shuffledAll = [...WORD_LIST].sort(() => Math.random() - 0.5);
+      // 先頭25問を取り出す
+      quizSessionWords = shuffledAll.slice(0, Math.min(25, WORD_LIST.length));
+      currentIdx = 0;
+      score = 0;
+      renderQuiz();
+    }
+
+    // --- 関数：クイズ描画 ---
     function renderQuiz() {
-      const currentWord = WORD_LIST[currentIdx];
-      
-      // 選択肢をランダムに並び替え
+      const currentWord = quizSessionWords[currentIdx];
       const shuffledOptions = [...currentWord.options].sort(() => Math.random() - 0.5);
 
       appDiv.innerHTML = `
-        <div class="flex justify-between text-xs font-bold text-slate-400 mb-2 px-2 uppercase tracking-widest">
-          <span>Target: Medical / Advanced</span>
-          <span>${currentIdx + 1} / ${WORD_LIST.length}</span>
+        <div class="flex justify-between text-xs font-bold text-slate-400 mb-2 px-2 tracking-widest uppercase">
+          <span>Random Exercise</span>
+          <span>${currentIdx + 1} / ${quizSessionWords.length}</span>
         </div>
         <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mb-6 fade-in">
-          <div class="h-44 flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-700 relative text-white">
-            <div id="feedback-icon" class="absolute top-4 text-2xl"></div>
+          <div class="h-44 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600 to-blue-700 relative text-white">
+            <div id="feedback-icon" class="absolute top-4 font-bold tracking-tighter opacity-80"></div>
             <h1 class="text-4xl font-black tracking-tight">${currentWord.word}</h1>
           </div>
         </div>
         <div class="grid gap-3 fade-in" style="animation-delay: 0.1s">
           ${shuffledOptions.map(opt => `
             <button onclick="handleAnswer('${opt.replace(/'/g, "\\'")}', this)" 
-              class="w-full text-left p-5 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 font-semibold text-lg transition-all active:scale-95 hover:border-blue-400">
+              class="w-full text-left p-5 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 font-semibold text-lg transition-all active:scale-95 hover:border-indigo-400">
               ${opt}
             </button>
           `).join('')}
@@ -127,32 +98,28 @@
       `;
     }
 
-    // 回答処理
+    // --- 関数：回答処理 ---
     function handleAnswer(selected, btn) {
       if (isAnswering) return;
       isAnswering = true;
 
-      const currentWord = WORD_LIST[currentIdx];
+      const currentWord = quizSessionWords[currentIdx];
       const isCorrect = selected === currentWord.meaning;
       const feedbackIcon = document.getElementById('feedback-icon');
 
       if (isCorrect) {
         score++;
-        btn.classList.replace('border-slate-200', 'border-green-500');
-        btn.classList.replace('bg-white', 'bg-green-50');
-        btn.classList.add('text-green-700');
+        btn.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
         feedbackIcon.innerText = "⭕️ CORRECT";
       } else {
-        btn.classList.replace('border-slate-200', 'border-red-500');
-        btn.classList.replace('bg-white', 'bg-red-50');
-        btn.classList.add('text-red-700');
+        btn.classList.add('border-red-500', 'bg-red-50', 'text-red-700');
         feedbackIcon.innerText = "❌ INCORRECT";
       }
 
       setTimeout(() => {
         currentIdx++;
         isAnswering = false;
-        if (currentIdx < WORD_LIST.length) {
+        if (currentIdx < quizSessionWords.length) {
           renderQuiz();
         } else {
           renderResult();
@@ -160,39 +127,42 @@
       }, 1000);
     }
 
-    // 結果画面
+    // --- 関数：結果表示 ---
     function renderResult() {
-      const accuracy = Math.round((score / WORD_LIST.length) * 100);
+      const accuracy = Math.round((score / quizSessionWords.length) * 100);
       totalPlays++;
-      if (accuracy > bestScore) bestScore = accuracy;
-      localStorage.setItem('teppeki_best', bestScore);
+      if (accuracy > bestScore) {
+        bestScore = accuracy;
+        localStorage.setItem('teppeki_best', bestScore);
+      }
       localStorage.setItem('teppeki_plays', totalPlays);
 
       appDiv.innerHTML = `
         <div class="bg-white p-8 rounded-3xl shadow-xl text-center fade-in">
-          <h2 class="text-xl font-bold text-slate-500 mb-2">RESULT</h2>
-          <div class="text-7xl font-black text-blue-600 mb-4">${accuracy}<span class="text-2xl">%</span></div>
-          <p class="text-slate-500 font-medium mb-8">Solved ${score} of ${WORD_LIST.length} problems</p>
+          <h2 class="text-xl font-bold text-slate-500 mb-2 tracking-widest">RESULT</h2>
+          <div class="text-7xl font-black text-indigo-600 mb-4">${accuracy}<span class="text-2xl">%</span></div>
+          <p class="text-slate-500 font-medium mb-8">Score: ${score} / ${quizSessionWords.length}</p>
           
           <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-slate-50 p-4 rounded-2xl text-left">
-              <p class="text-xs text-slate-400 font-bold uppercase mb-1">Best Score</p>
+            <div class="bg-slate-50 p-4 rounded-2xl text-left border border-slate-100">
+              <p class="text-xs text-slate-400 font-bold uppercase mb-1 tracking-tighter">Personal Best</p>
               <p class="text-xl font-black text-slate-700">${bestScore}%</p>
             </div>
-            <div class="bg-slate-50 p-4 rounded-2xl text-left">
-              <p class="text-xs text-slate-400 font-bold uppercase mb-1">Sessions</p>
+            <div class="bg-slate-50 p-4 rounded-2xl text-left border border-slate-100">
+              <p class="text-xs text-slate-400 font-bold uppercase mb-1 tracking-tighter">Total Plays</p>
               <p class="text-xl font-black text-slate-700">${totalPlays}</p>
             </div>
           </div>
 
-          <button onclick="location.reload()" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-transform">
-            TRY AGAIN
+          <button onclick="startNewSession()" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-transform hover:bg-slate-800">
+            START NEXT SESSION
           </button>
         </div>
       `;
     }
 
-    renderQuiz();
+    // アプリ起動
+    startNewSession();
   </script>
 </body>
 </html>
