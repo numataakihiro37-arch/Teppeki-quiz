@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鉄壁 Section 1 演習</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center p-4 font-sans text-slate-800 pt-10">
+
+  <div id="app" class="w-full max-w-md"></div>
+
+  <script>
+    // 鉄壁の単語データ
+    const WORD_LIST = [
+      { word: 'acquire', meaning: '〜を習得する、〜を獲得する', options: ['〜を習得する、〜を獲得する', '〜を捨てる', '〜を避ける', '〜を誇る'] },
+      { word: 'attain', meaning: '〜を達成する、〜に到達する', options: ['〜を維持する', '〜を達成する、〜に到達する', '〜を妨げる', '〜を疑う'] },
+      { word: 'abandon', meaning: '〜を捨てる、〜をあきらめる', options: ['〜を育てる', '〜を認める', '〜を捨てる、〜をあきらめる', '〜を隠す'] },
+      { word: 'obtain', meaning: '〜を手に入れる', options: ['〜を手に入れる', '〜を失う', '〜を比較する', '〜を主張する'] }
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+    let isAnswering = false;
+
+    const appDiv = document.getElementById('app');
+
+    // ブラウザの記憶（LocalStorage）から過去の記録を取得
+    let bestScore = parseInt(localStorage.getItem('teppeki_best') || '0');
+    let totalPlays = parseInt(localStorage.getItem('teppeki_plays') || '0');
+
+    // クイズ画面を描画する関数
+    function renderQuiz() {
+      const currentWord = WORD_LIST[currentIdx];
+      
+      let optionsHtml = '';
+      currentWord.options.forEach(option => {
+        optionsHtml += `
+          <button onclick="handleAnswer('${option}', this)" class="w-full text-left p-5 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-medium text-lg mb-3 shadow-sm transition-all duration-200 active:scale-95">
+            ${option}
+          </button>
+        `;
+      });
+
+      appDiv.innerHTML = `
+        <div class="flex justify-between text-sm font-bold text-slate-500 mb-4 px-2">
+          <span>Section 1: 獲得・達成</span>
+          <span>${currentIdx + 1} / ${WORD_LIST.length}</span>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-8">
+          <div class="h-48 flex items-center justify-center bg-gradient-to-b from-blue-50 to-white relative" id="feedback-area">
+            <h1 class="text-5xl font-extrabold text-slate-800 tracking-tight">${currentWord.word}</h1>
+          </div>
+        </div>
+        <div>${optionsHtml}</div>
+      `;
+    }
+
+    // 回答が選択された時の処理
+    function handleAnswer(selected, btnElement) {
+      if (isAnswering) return; // 連打防止
+      isAnswering = true;
+
+      const currentWord = WORD_LIST[currentIdx];
+      const isCorrect = selected === currentWord.meaning;
+      const feedbackArea = document.getElementById('feedback-area');
+
+      // 正解・不正解の見た目変更
+      if (isCorrect) {
+        score++;
+        btnElement.classList.replace('border-slate-200', 'border-green-500');
+        btnElement.classList.replace('bg-white', 'bg-green-50');
+        btnElement.classList.replace('text-slate-700', 'text-green-700');
+        feedbackArea.innerHTML += `<div class="absolute top-4 text-green-500 font-bold text-xl animate-bounce">⭕️ 正解！</div>`;
+      } else {
+        btnElement.classList.replace('border-slate-200', 'border-red-500');
+        btnElement.classList.replace('bg-white', 'bg-red-50');
+        btnElement.classList.replace('text-slate-700', 'text-red-700');
+        feedbackArea.innerHTML += `<div class="absolute top-4 text-red-500 font-bold text-xl">❌ 不正解...</div>`;
+      }
+
+      // 1.2秒後に次の問題または結果画面へ
+      setTimeout(() => {
+        currentIdx++;
+        isAnswering = false;
+        if (currentIdx < WORD_LIST.length) {
+          renderQuiz();
+        } else {
+          renderResult();
+        }
+      }, 1200);
+    }
+
+    // 結果画面を描画する関数
+    function renderResult() {
+      const accuracy = Math.round((score / WORD_LIST.length) * 100);
+      
+      // 記録の更新と保存
+      totalPlays++;
+      if (accuracy > bestScore) bestScore = accuracy;
+      
+      localStorage.setItem('teppeki_best', bestScore);
+      localStorage.setItem('teppeki_plays', totalPlays);
+
+      appDiv.innerHTML = `
+        <div class="bg-white p-8 rounded-2xl shadow-lg text-center w-full">
+          <h2 class="text-2xl font-bold mb-6 text-slate-700">演習完了！</h2>
+          <div class="text-6xl font-extrabold text-blue-600 mb-2">${accuracy}%</div>
+          <p class="text-lg text-slate-500 mb-6">${WORD_LIST.length}問中 ${score}問正解</p>
+          
+          <div class="bg-blue-50 rounded-lg p-4 mb-8 text-sm text-left">
+            <p class="mb-2">🏆 これまでの最高正答率: <span class="font-bold">${bestScore}%</span></p>
+            <p>📚 累計学習回数: <span class="font-bold">${totalPlays}回</span></p>
+          </div>
+
+          <button onclick="restart()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg shadow-md transition-colors active:bg-blue-700">
+            もう一度解く
+          </button>
+        </div>
+      `;
+    }
+
+    // もう一度解く時のリセット処理
+    function restart() {
+      currentIdx = 0;
+      score = 0;
+      renderQuiz();
+    }
+
+    // アプリの起動
+    renderQuiz();
+  </script>
+</body>
+</html>
