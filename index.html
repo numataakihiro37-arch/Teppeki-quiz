@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>鉄壁演習 2026</title>
+  <title>鉄壁演習 2026 - Fixed</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -15,65 +15,59 @@
   <div id="app" class="w-full max-w-md"></div>
 
   <script>
-    // --- 単語データベース（ここを増やせば200問でも対応可能） ---
+    // --- 単語データベース ---
+    // ルール：optionsの [0] 番目（最初）に必ず正解を書いてください。表示時は自動で混ざります。
     const WORD_LIST = [
-      // Section 1
-      { word: 'acquire', meaning: '〜を習得する、〜を獲得する', options: ['〜を習得する', '〜を捨てる', '〜を避ける', '〜を誇る'] },
-      { word: 'attain', meaning: '〜を達成する、〜に到達する', options: ['〜を維持する', '〜を達成する', '〜を妨げる', '〜を疑う'] },
-      { word: 'abandon', meaning: '〜を捨てる、〜をあきらめる', options: ['〜を育てる', '〜を認める', '〜を捨てる', '〜を隠す'] },
-      { word: 'obtain', meaning: '〜を手に入れる', options: ['〜を手に入れる', '〜を失う', '〜を比較する', '〜を主張する'] },
-      { word: 'fulfill', meaning: '〜を果たす、〜を満たす', options: ['〜を無視する', '〜を破壊する', '〜を延期する', '〜を果たす'] },
-      { word: 'accomplish', meaning: '〜を成し遂げる', options: ['〜を成し遂げる', '〜を諦める', '〜を計画する', '〜を失敗する'] },
-      { word: 'achieve', meaning: '〜を達成する', options: ['〜を邪魔する', '〜を達成する', '〜を後回しにする', '〜を忘れる'] },
-      // Section 2
-      { word: 'deprive', meaning: '〜から奪う', options: ['〜から奪う', '〜に与える', '〜を許す', '〜を救う'] },
-      { word: 'rob', meaning: '〜から奪う、盗む', options: ['〜を貸す', '〜から奪う', '〜を祝う', '〜を避ける'] },
-      { word: 'omit', meaning: '〜を除外する、抜かす', options: ['〜を加える', '〜を強調する', '〜を除外する', '〜を認める'] },
-      { word: 'exclude', meaning: '〜を除外する', options: ['〜を含む', '〜を除外する', '〜を招待する', '〜を混ぜる'] },
-      { word: 'reject', meaning: '〜を拒絶する', options: ['〜を拒絶する', '〜を受け入れる', '〜を称賛する', '〜を提案する'] },
-      { word: 'refuse', meaning: '〜を断る', options: ['〜を断る', '〜を同意する', '〜を許す', '〜を頼む'] },
-      { word: 'deny', meaning: '〜を否定する', options: ['〜を主張する', '〜を肯定する', '〜を否定する', '〜を白状する'] },
-      // Section 3
-      { word: 'retain', meaning: '〜を保持する、維持する', options: ['〜を放出する', '〜を保持する', '〜を忘れる', '〜を捨てる'] },
-      { word: 'maintain', meaning: '〜を維持する、主張する', options: ['〜を維持する', '〜を放棄する', '〜を無視する', '〜を疑う'] },
-      { word: 'preserve', meaning: '〜を保存する、保護する', options: ['〜を破壊する', '〜を汚染する', '〜を保存する', '〜を消費する'] },
-      { word: 'sustain', meaning: '〜を支える、持続させる', options: ['〜を支える', '〜を崩壊させる', '〜を止める', '〜を拒む'] },
-      { word: 'persist', meaning: '持続する、固執する', options: ['持続する', '諦める', '変化する', '移動する'] },
-      // Section 4 & 5
-      { word: 'alter', meaning: '〜を変える', options: ['〜を変える', '〜を維持する', '〜を固定する', '〜を模倣する'] },
-      { word: 'modify', meaning: '〜を修正する', options: ['〜を強化する', '〜を修正する', '〜を放置する', '〜を破壊する'] },
-      { word: 'attach', meaning: '〜を貼り付ける、添付する', options: ['〜を貼り付ける', '〜を切り離す', '〜を捨てる', '〜を運ぶ'] },
-      { word: 'detach', meaning: '〜を切り離す', options: ['〜を貼り付ける', '〜を切り離す', '〜を混ぜる', '〜を隠す'] },
-      { word: 'combine', meaning: '〜を結合させる', options: ['〜を結合させる', '〜を分離する', '〜を破壊する', '〜を拒否する'] },
-      { word: 'separate', meaning: '〜を分離する', options: ['〜を分離する', '〜をつなぐ', '〜を招待する', '〜を好む'] }
+      { word: 'acquire', options: ['〜を習得する、獲得する', '〜を捨てる', '〜を避ける', '〜を誇る'] },
+      { word: 'attain', options: ['〜を達成する、到達する', '〜を維持する', '〜を妨げる', '〜を疑う'] },
+      { word: 'abandon', options: ['〜を捨てる、あきらめる', '〜を育てる', '〜を認める', '〜を隠す'] },
+      { word: 'obtain', options: ['〜を手に入れる', '〜を失う', '〜を比較する', '〜を主張する'] },
+      { word: 'fulfill', options: ['〜を果たす、満たす', '〜を無視する', '〜を破壊する', '〜を延期する'] },
+      { word: 'accomplish', options: ['〜を成し遂げる', '〜を諦める', '〜を計画する', '〜を失敗する'] },
+      { word: 'achieve', options: ['〜を達成する', '〜を邪魔する', '〜を後回しにする', '〜を忘れる'] },
+      { word: 'deprive', options: ['〜から奪う', '〜に与える', '〜を許す', '〜を救う'] },
+      { word: 'rob', options: ['〜から奪う、盗む', '〜を貸す', '〜を祝う', '〜を避ける'] },
+      { word: 'omit', options: ['〜を除外する、抜かす', '〜を加える', '〜を強調する', '〜を認める'] },
+      { word: 'exclude', options: ['〜を除外する', '〜を含む', '〜を招待する', '〜を混ぜる'] },
+      { word: 'reject', options: ['〜を拒絶する', '〜を受け入れる', '〜を称賛する', '〜を提案する'] },
+      { word: 'refuse', options: ['〜を断る', '〜を同意する', '〜を許す', '〜を頼む'] },
+      { word: 'deny', options: ['〜を否定する', '〜を主張する', '〜を肯定する', '〜を白状する'] },
+      { word: 'retain', options: ['〜を保持する', '〜を放出する', '〜を忘れる', '〜を捨てる'] },
+      { word: 'maintain', options: ['〜を維持する', '〜を放棄する', '〜を無視する', '〜を疑う'] },
+      { word: 'preserve', options: ['〜を保存する', '〜を破壊する', '〜を汚染する', '〜を消費する'] },
+      { word: 'sustain', options: ['〜を支える', '〜を崩壊させる', '〜を止める', '〜を拒む'] },
+      { word: 'persist', options: ['持続する、固執する', '諦める', '変化する', '移動する'] },
+      { word: 'alter', options: ['〜を変える', '〜を維持する', '〜を固定する', '〜を模倣する'] },
+      { word: 'modify', options: ['〜を修正する', '〜を強化する', '〜を放置する', '〜を破壊する'] },
+      { word: 'attach', options: ['〜を貼り付ける', '〜を切り離す', '〜を捨てる', '〜を運ぶ'] },
+      { word: 'detach', options: ['〜を切り離す', '〜を貼り付ける', '〜を混ぜる', '〜を隠す'] },
+      { word: 'combine', options: ['〜を結合させる', '〜を分離する', '〜を破壊する', '〜を拒否する'] },
+      { word: 'separate', options: ['〜を分離する', '〜をつなぐ', '〜を招待する', '〜を好む'] }
     ];
 
-    // --- 状態管理用変数 ---
-    let quizSessionWords = []; // 今回の25問
+    let quizSessionWords = [];
     let currentIdx = 0;
     let score = 0;
     let isAnswering = false;
 
-    // ローカルストレージ
     let bestScore = parseInt(localStorage.getItem('teppeki_best') || '0');
     let totalPlays = parseInt(localStorage.getItem('teppeki_plays') || '0');
 
     const appDiv = document.getElementById('app');
 
-    // --- 関数：セッション開始 ---
     function startNewSession() {
-      // 全単語をシャッフル
       const shuffledAll = [...WORD_LIST].sort(() => Math.random() - 0.5);
-      // 先頭25問を取り出す
       quizSessionWords = shuffledAll.slice(0, Math.min(25, WORD_LIST.length));
       currentIdx = 0;
       score = 0;
       renderQuiz();
     }
 
-    // --- 関数：クイズ描画 ---
     function renderQuiz() {
       const currentWord = quizSessionWords[currentIdx];
+      // 正解を保存（options[0]が正解）
+      const correctAnswer = currentWord.options[0];
+      // 表示用にシャッフル
       const shuffledOptions = [...currentWord.options].sort(() => Math.random() - 0.5);
 
       appDiv.innerHTML = `
@@ -89,8 +83,8 @@
         </div>
         <div class="grid gap-3 fade-in" style="animation-delay: 0.1s">
           ${shuffledOptions.map(opt => `
-            <button onclick="handleAnswer('${opt.replace(/'/g, "\\'")}', this)" 
-              class="w-full text-left p-5 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 font-semibold text-lg transition-all active:scale-95 hover:border-indigo-400">
+            <button onclick="handleAnswer('${opt.replace(/'/g, "\\'")}', '${correctAnswer.replace(/'/g, "\\'")}', this)" 
+              class="w-full text-left p-5 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 font-semibold text-lg transition-all active:scale-95">
               ${opt}
             </button>
           `).join('')}
@@ -98,14 +92,12 @@
       `;
     }
 
-    // --- 関数：回答処理 ---
-    function handleAnswer(selected, btn) {
+    function handleAnswer(selected, correct, btn) {
       if (isAnswering) return;
       isAnswering = true;
 
-      const currentWord = quizSessionWords[currentIdx];
-      const isCorrect = selected === currentWord.meaning;
       const feedbackIcon = document.getElementById('feedback-icon');
+      const isCorrect = selected === correct;
 
       if (isCorrect) {
         score++;
@@ -127,7 +119,6 @@
       }, 1000);
     }
 
-    // --- 関数：結果表示 ---
     function renderResult() {
       const accuracy = Math.round((score / quizSessionWords.length) * 100);
       totalPlays++;
@@ -161,7 +152,6 @@
       `;
     }
 
-    // アプリ起動
     startNewSession();
   </script>
 </body>
