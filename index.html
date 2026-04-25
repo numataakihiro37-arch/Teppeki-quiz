@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>鉄壁演習 2026 - Fixed</title>
+  <title>鉄壁演習 2026 - 200 Words Master</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -15,9 +15,10 @@
   <div id="app" class="w-full max-w-md"></div>
 
   <script>
-    // --- 単語データベース ---
-    // ルール：optionsの [0] 番目（最初）に必ず正解を書いてください。表示時は自動で混ざります。
+    // --- 単語データベース（厳選200語） ---
+    // optionsの [0] 番目が常に正解です。表示時は自動でシャッフルされます。
     const WORD_LIST = [
+      // Section 1-5: 基礎〜変化・結合
       { word: 'acquire', options: ['〜を習得する、獲得する', '〜を捨てる', '〜を避ける', '〜を誇る'] },
       { word: 'attain', options: ['〜を達成する、到達する', '〜を維持する', '〜を妨げる', '〜を疑う'] },
       { word: 'abandon', options: ['〜を捨てる、あきらめる', '〜を育てる', '〜を認める', '〜を隠す'] },
@@ -42,8 +43,9 @@
       { word: 'attach', options: ['〜を貼り付ける', '〜を切り離す', '〜を捨てる', '〜を運ぶ'] },
       { word: 'detach', options: ['〜を切り離す', '〜を貼り付ける', '〜を混ぜる', '〜を隠す'] },
       { word: 'combine', options: ['〜を結合させる', '〜を分離する', '〜を破壊する', '〜を拒否する'] },
-      { word: 'separate', options: ['〜を分離する', '〜をつなぐ', '〜を招待する', '〜を好む'] }
-            // --- 生命科学・医療・身体（難関大頻出） ---
+      { word: 'separate', options: ['〜を分離する', '〜をつなぐ', '〜を招待する', '〜を好む'] },
+
+      // 生命科学・医療・身体
       { word: 'anatomy', options: ['解剖（学）、構造', '植物学', '治療法', '遺伝子'] },
       { word: 'metabolism', options: ['新陳代謝、代謝', '呼吸', '消化', '循環'] },
       { word: 'respiration', options: ['呼吸', '脈拍', '睡眠', '発汗'] },
@@ -74,8 +76,12 @@
       { word: 'diagnose', options: ['〜を診断する', '〜を処方する', '〜を治療する', '〜を予防する'] },
       { word: 'prescribe', options: ['〜を処方する', '〜を診断する', '〜を禁止する', '〜を摂取する'] },
       { word: 'immune', options: ['免疫のある', '感染しやすい', '致命的な', '慢性の'] },
+      { word: 'susceptible', options: ['影響を受けやすい', '抵抗力のある', '無症状の', '健康的な'] },
+      { word: 'paralyze', options: ['〜を麻痺させる', '〜を刺激する', '〜を活性化する', '〜を治癒する'] },
+      { word: 'stroke', options: ['脳卒中、発作', '消化不良', '骨折', '打撲'] },
+      { word: 'tumor', options: ['腫瘍', '筋肉', '神経', '血管'] },
 
-      // --- 高度抽象語・ビジネス・実践語彙 ---
+      // 高度抽象語・論理・ビジネス
       { word: 'implement', options: ['〜を実行する', '〜を計画する', '〜を中止する', '〜を評価する'] },
       { word: 'allocate', options: ['〜を割り当てる', '〜を独占する', '〜を没収する', '〜を蓄積する'] },
       { word: 'revenue', options: ['収益、収入', '支出', '赤字', '負債'] },
@@ -107,7 +113,7 @@
       { word: 'empirical', options: ['経験的な、実証的な', '理論的な', '空想的な', '直感的な'] },
       { word: 'qualitative', options: ['質的な', '量的な', '金銭的な', '物理的な'] },
 
-      // --- 心理・認知・感情 ---
+      // 心理・認知・感情
       { word: 'delight', options: ['〜を大喜びさせる', '〜を悲しませる', '〜を怒らせる', '〜を無視する'] },
       { word: 'fascinate', options: ['〜を魅了する', '〜を退屈させる', '〜を嫌悪させる', '〜を威嚇する'] },
       { word: 'annoy', options: ['〜をいらいらさせる', '〜を喜ばせる', '〜を慰める', '〜を無視する'] },
@@ -129,7 +135,7 @@
       { word: 'consent', options: ['同意、承諾', '拒否', '反発', '無視'] },
       { word: 'reluctance', options: ['気が進まないこと', '熱望', '意欲', '歓喜'] },
 
-      // --- 社会・環境 ---
+      // 社会・環境・経済
       { word: 'prosper', options: ['繁栄する', '衰退する', '滅亡する', '停滞する'] },
       { word: 'thrive', options: ['繁栄する、成長する', '枯れる', '縮小する', '苦しむ'] },
       { word: 'decay', options: ['腐敗する、衰退する', '繁栄する', '成長する', '回復する'] },
@@ -149,7 +155,61 @@
       { word: 'urban', options: ['都市の', '田舎の', '野生の', '古代の'] },
       { word: 'rural', options: ['田舎の', '都市の', '先進的な', '工業の'] },
       { word: 'agriculture', options: ['農業', '工業', '商業', '漁業'] },
-      { word: 'harvest', options: ['収穫、収穫期', '種まき', '枯渇', '凶作'] }
+      { word: 'harvest', options: ['収穫、収穫期', '種まき', '枯渇', '凶作'] },
+
+      // 重要形容詞・副詞（難関大長文のキー）
+      { word: 'adequate', options: ['十分な、適切な', '不足している', '過剰な', '不適切な'] },
+      { word: 'appropriate', options: ['適切な、ふさわしい', '不適当な', '偶然の', '意図的な'] },
+      { word: 'fundamental', options: ['基本的な、根本的な', '表面的な', '例外的な', '一時的な'] },
+      { word: 'radical', options: ['根本的な、急進的な', '保守的な', '穏健な', '部分的な'] },
+      { word: 'ultimate', options: ['究極の、最終の', '最初の', '中間の', '一時的な'] },
+      { word: 'absolute', options: ['絶対的な', '相対的な', '条件付きの', '曖昧な'] },
+      { word: 'relative', options: ['相対的な、関係のある', '絶対的な', '無関係の', '孤立した'] },
+      { word: 'apparent', options: ['明白な、一見〜らしい', '隠された', '複雑な', '無名の'] },
+      { word: 'obvious', options: ['明白な', '不明確な', '秘密の', '複雑な'] },
+      { word: 'evident', options: ['明白な、証拠のある', '疑わしい', '根拠のない', '隠蔽された'] },
+      { word: 'distinct', options: ['明確な、全く異なる', '曖昧な', '同一の', '似ている'] },
+      { word: 'prominent', options: ['著名な、目立つ', '無名の', '平凡な', '隠れた'] },
+      { word: 'obscure', options: ['不明瞭な、無名の', '有名な', '明確な', '明るい'] },
+      { word: 'subtle', options: ['微妙な、捉えがたい', '明白な', '劇的な', '大げさな'] },
+      { word: 'ambiguous', options: ['曖昧な、多義的な', '明確な', '単一の', '具体的な'] },
+      { word: 'vague', options: ['漠然とした、曖昧な', '明確な', '正確な', '具体的な'] },
+      { word: 'precise', options: ['正確な、精密な', '不正確な', '大雑把な', '曖昧な'] },
+      { word: 'accurate', options: ['正確な', '間違った', '不適当な', '偽の'] },
+      { word: 'exact', options: ['正確な、厳密な', '大体の', '緩い', '不正確な'] },
+      { word: 'rigid', options: ['厳格な、硬直した', '柔軟な', '柔らかい', '寛大な'] },
+      { word: 'strict', options: ['厳しい、厳密な', '甘い', '緩い', '大雑把な'] },
+      { word: 'severe', options: ['深刻な、厳しい', '軽度の', '穏やかな', '優しい'] },
+      { word: 'flexible', options: ['柔軟な', '硬直した', '頑固な', '不変の'] },
+      { word: 'fierce', options: ['激しい、凶暴な', '穏やかな', '弱い', '優しい'] },
+      { word: 'hostile', options: ['敵意のある', '友好的な', '中立の', '協力的な'] },
+      { word: 'aggressive', options: ['攻撃的な、積極的な', '消極的な', '防衛的な', '平和的な'] },
+      { word: 'bold', options: ['大胆な', '臆病な', '慎重な', '無関心な'] },
+      { word: 'brave', options: ['勇敢な', '臆病な', '卑怯な', '恐れる'] },
+      { word: 'timid', options: ['臆病な、内気な', '勇敢な', '大胆な', '社交的な'] },
+      { word: 'polite', options: ['礼儀正しい', '無礼な', '粗野な', '乱暴な'] },
+      { word: 'rude', options: ['無礼な、粗雑な', '丁寧な', '洗練された', '親切な'] },
+      { word: 'ridiculous', options: ['ばかげた', '真面目な', '論理的な', '賢明な'] },
+      { word: 'absurd', options: ['不条理な、ばかげた', '合理的な', '明白な', '現実的な'] },
+      { word: 'weird', options: ['奇妙な', '普通の', 'ありふれた', '正常な'] },
+      { word: 'bizarre', options: ['異様な、風変わりな', '平凡な', '退屈な', '標準的な'] },
+      { word: 'insane', options: ['正気でない、狂気の', '正気の', '冷静な', '賢い'] },
+      { word: 'infinite', options: ['無限の', '有限の', 'わずかな', '一時的な'] },
+      { word: 'temporary', options: ['一時的な', '永久の', '持続的な', '永遠の'] },
+      { word: 'permanent', options: ['永久の、常設の', '一時的な', '仮の', '変動する'] },
+      { word: 'eternal', options: ['永遠の', '一瞬の', '有期の', '現代の'] },
+      { word: 'fatal', options: ['致命的な、取り返しのつかない', '無害な', '軽傷の', '治癒する'] },
+      { word: 'lethal', options: ['致死的な、破壊的な', '安全な', '健康的な', '無毒な'] },
+      { word: 'vital', options: ['極めて重要な、生命の', '些細な', '無関係な', '不要な'] },
+      { word: 'crucial', options: ['決定的な、極めて重要な', '取るに足らない', '未定の', '曖昧な'] },
+      { word: 'essential', options: ['不可欠な、本質的な', '付随的な', '余分な', '表面的な'] },
+      { word: 'indispensable', options: ['絶対に必要な', '不要な', '代替可能な', '無用な'] },
+      { word: 'significant', options: ['重要な、かなりの', '無意味な', 'わずかな', '取るに足らない'] },
+      { word: 'trivial', options: ['些細な、取るに足らない', '重要な', '重大な', '本質的な'] },
+      { word: 'partial', options: ['部分的な、不公平な', '全体的な', '完全な', '公平な'] },
+      { word: 'entire', options: ['全体の、完全な', '部分的な', '欠けた', '一部の'] },
+      { word: 'whole', options: ['全体の', '分割された', '一部の', '半分の'] },
+      { word: 'complete', options: ['完全な', '不完全な', '未完成の', '不足した'] }
     ];
 
     let quizSessionWords = [];
@@ -162,6 +222,7 @@
 
     const appDiv = document.getElementById('app');
 
+    // セッション開始（200語の中からランダムに25問出題）
     function startNewSession() {
       const shuffledAll = [...WORD_LIST].sort(() => Math.random() - 0.5);
       quizSessionWords = shuffledAll.slice(0, Math.min(25, WORD_LIST.length));
@@ -170,11 +231,10 @@
       renderQuiz();
     }
 
+    // 画面の描画
     function renderQuiz() {
       const currentWord = quizSessionWords[currentIdx];
-      // 正解を保存（options[0]が正解）
       const correctAnswer = currentWord.options[0];
-      // 表示用にシャッフル
       const shuffledOptions = [...currentWord.options].sort(() => Math.random() - 0.5);
 
       appDiv.innerHTML = `
@@ -199,6 +259,7 @@
       `;
     }
 
+    // 解答の処理
     function handleAnswer(selected, correct, btn) {
       if (isAnswering) return;
       isAnswering = true;
@@ -226,6 +287,7 @@
       }, 1000);
     }
 
+    // 結果表示
     function renderResult() {
       const accuracy = Math.round((score / quizSessionWords.length) * 100);
       totalPlays++;
@@ -259,6 +321,7 @@
       `;
     }
 
+    // アプリ起動
     startNewSession();
   </script>
 </body>
